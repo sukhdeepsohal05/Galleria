@@ -1,0 +1,10 @@
+.related-images__main-wrapper{
+    margin: 50px 16px;
+}
+
+.related-images__wrapper{
+    columns: 250px 3;
+    gap: 24px;
+    vertical-align: middle;
+    margin-top: 10px;
+}

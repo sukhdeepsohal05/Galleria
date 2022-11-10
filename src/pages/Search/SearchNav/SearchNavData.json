@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Any orientation",
+    "orientations": [
+      {
+        "name": "Landscape",
+        "link_name": "landscape"
+      },
+      {
+        "name": "Portrait",
+        "link_name": "portrait"
+      },
+      {
+        "name": "Square",
+        "link_name": "squarish"
+      }
+    ]
+  },
+  {
+    "name": "Any color",
+    "colors": [
+      {
+        "name": "Black and white",
+        "link_name": "black_and_white"
+      },
+      {
+        "tones": [
+          {
+            "name": "White"
+          },
+          {
+            "name": "Black"
+          },
+          {
+            "name": "Yellow"
+          },
+          {
+            "name": "Orange"
+          },
+          {
+            "name": "Red"
+          },
+          {
+            "name": "Purple"
+          },
+          {
+            "name": "Magenta"
+          },
+          {
+            "name": "Green"
+          },
+          {
+            "name": "Teal"
+          },
+          {
+            "name": "Blue"
+          }
+        ]
+      }
+    ]
+  }
+]

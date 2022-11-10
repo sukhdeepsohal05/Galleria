@@ -1,0 +1,57 @@
+[
+  {
+    "id": 1,
+    "name": "Experimental",
+    "targetName": "experimental"
+  },
+  {
+    "id": 2,
+    "name": "3D Renders",
+    "targetName": "3d-renders"
+  },
+  {
+    "id": 3,
+    "name": "Architecture & Interiors",
+    "targetName": "architecture-interior"
+  },
+  {
+    "id": 4,
+    "name": "Fashion & Beauty",
+    "targetName": "fashion-beauty"
+  },
+  {
+    "id": 5,
+    "name": "Curret Events",
+    "targetName": "current-events"
+  },
+  {
+    "id": 6,
+    "name": "Nature",
+    "targetName": "nature"
+  },
+  {
+    "id": 7,
+    "name": "Food & Drink",
+    "targetName": "food-drink"
+  },
+  {
+    "id": 8,
+    "name": "Film",
+    "targetName": "film"
+  },
+  {
+    "id": 9,
+    "name": "People",
+    "targetName": "people"
+  },
+  {
+    "id": 10,
+    "name": "Athletics",
+    "targetName": "athletics"
+  },
+  {
+    "id": 11,
+    "name": "Street Photography",
+    "targetName": "street-photography"
+  }
+]
