@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { useParams, useSearchParams } from "react-router-dom";
 import Images from "../../components/UI/Images/Images";
 import Users from "../../components/UI/Users/Users";
@@ -22,48 +23,49 @@ export default function Search(props) {
   const [totalUsersPages, setTotalUserPages] = useState(0);
 
   const updateSearchPhotos = async (pageNum) => {
-    props.setProgress(10);
-    const url = `https://api.unsplash.com/search/photos?query=${search}&client_id=${
-      props.apiKey
-    }&page=${pageNum}&per_page=30${
-      orientation && `&orientation=${orientation}`
-    }${color ? `&color=${color}` : ""}${
-      order_by ? `&order_by=${order_by}` : ""
-    }`;
     props.setProgress(30);
-    let data = await fetch(url);
-    props.setProgress(50);
-    let parsedData = await data.json();
-    props.setProgress(70);
-    setTotalImages(
-      parsedData.total >= 1000
-        ? (parsedData.total / 1000).toFixed(1) + "k"
-        : parsedData.total
-    );
-    setTotalImagesPages(parsedData.total_pages);
-    setImages(parsedData.results);
-    props.setPagination(true);
-    props.setProgress(100);
+    try {
+      const response = await axios.get(
+        `https://api.unsplash.com/search/photos?query=${search}&client_id=${
+          props.apiKey
+        }&page=${pageNum}&per_page=30${
+          orientation && `&orientation=${orientation}`
+        }${color ? `&color=${color}` : ""}${
+          order_by ? `&order_by=${order_by}` : ""
+        }`
+      );
+      props.setProgress(50);
+      setTotalImages(
+        response.data.total >= 1000
+          ? (response.data.total / 1000).toFixed(1) + "k"
+          : response.data.total
+      );
+      props.setProgress(70);
+      setTotalImagesPages(response.data.total_pages);
+      setImages(response.data.results);
+      props.setPagination(true);
+      props.setProgress(100);
+    } catch (error) {}
   };
 
   const updateSearchUsers = async (pageNum) => {
-    props.setProgress(10);
-    const url = `https://api.unsplash.com/search/users?query=${search}&client_id=${props.apiKey}&page=${pageNum}&per_page=30`;
     props.setProgress(30);
-    let data = await fetch(url);
-    props.setProgress(50);
-    let parsedData = await data.json();
-    props.setProgress(70);
-    setTotalUsers(
-      parsedData.total >= 1000
-        ? (!(parsedData.total / 1000).toString().includes(".0")
-            ? (parsedData.total / 1000).toFixed(1)
-            : parsedData.total / 1000) + "k"
-        : parsedData.total
-    );
-    setTotalUserPages(parsedData.total_pages);
-    setUsers(parsedData.results);
-    props.setProgress(100);
+    try {
+      const response = await axios.get(
+        `https://api.unsplash.com/search/users?query=${search}&client_id=${props.apiKey}&page=${pageNum}&per_page=30`
+      );
+      props.setProgress(50);
+      setTotalUsers(
+        response.data.total >= 1000
+          ? (!(response.data.total / 1000).toString().includes(".0")
+              ? (response.data.total / 1000).toFixed(1)
+              : response.data.total / 1000) + "k"
+          : response.data.total
+      );
+      setTotalUserPages(response.data.total_pages);
+      setUsers(response.data.results);
+      props.setProgress(100);
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -90,6 +92,7 @@ export default function Search(props) {
             images={images}
             apiKey={props.apiKey}
             setProgress={props.setProgress}
+            setPagination={props.setPagination}
             setIsImageDownloaded={props.setIsImageDownloaded}
             setDownloadedImageData={props.setDownloadedImageData}
           />

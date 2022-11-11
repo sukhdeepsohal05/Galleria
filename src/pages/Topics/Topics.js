@@ -1,4 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
+import axios from "axios";
 import { useParams } from "react-router-dom";
 import TopicsNav from "../Topics/Topics Nav/TopicsNav";
 import Images from "../../components/UI/Images/Images";
@@ -11,18 +12,18 @@ export default function Topics(props) {
   const [isTopicFound, setIsTopicFound] = useState(true);
 
   const updateImages = async (pageNum) => {
-    props.setProgress(10);
-    const url = `https://api.unsplash.com/topics/${topic}/photos?client_id=${props.apiKey}&page=${pageNum}&per_page=30`;
-    props.setProgress(30);
-    let data = await fetch(url);
-    props.setProgress(50);
-    let parsedData = await data.json();
-    props.setProgress(100);
-    props.setPagination(true);
-    if (!parsedData.errors) {
-      setImages(parsedData);
+    try {
+      props.setProgress(30);
+      const response = await axios.get(
+        `https://api.unsplash.com/topics/${topic}/photos?client_id=${props.apiKey}&page=${pageNum}&per_page=30`
+      );
+      props.setProgress(50);
+      props.setPagination(true);
+      setImages(response.data);
       props.setTotalPages(100);
-    } else {
+      props.setProgress(100);
+    } catch (error) {
+      props.setProgress(100);
       setIsTopicFound(false);
     }
   };
@@ -42,13 +43,14 @@ export default function Topics(props) {
               images={images}
               apiKey={props.apiKey}
               setProgress={props.setProgress}
+              setPagination={props.setPagination}
               setIsImageDownloaded={props.setIsImageDownloaded}
               setDownloadedImageData={props.setDownloadedImageData}
             />
           </div>
         </Fragment>
       ) : (
-        <ErrorPage setPagination={props.setPagination}/>
+        <ErrorPage setPagination={props.setPagination} />
       )}
     </React.Fragment>
   );

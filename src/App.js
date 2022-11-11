@@ -106,8 +106,8 @@ export default function App() {
               <SelectedPhoto
                 apiKey={apiKey}
                 setProgress={setProgress}
-                setIsImageDownloaded={setIsImageDownloaded}
                 setPagination={setPagination}
+                setIsImageDownloaded={setIsImageDownloaded}
                 setDownloadedImageData={setDownloadedImageData}
               />
             }

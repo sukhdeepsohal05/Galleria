@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { useParams } from "react-router-dom";
 import RelatedImages from "../../components/RelatedImages/RelatedImages";
 import DownloadBtn from "../../components/UI/DowloadBtn/DownloadBtn";
@@ -9,53 +10,52 @@ export default function SelectedPhoto(props) {
   const { photoId } = useParams();
 
   const [isImageFound, setIsImageFound] = useState(true);
-  const [selectedPhotoData, setSelectedPhotoData] = useState({});
+  const [selectedPhotoData, setSelectedPhotoData] = useState([]);
   const [downloadMenu, setDownloadMenu] = useState(false);
 
   const updateSelectedPhoto = async (imageId) => {
-    props.setProgress(10);
-    const url = `https://api.unsplash.com/photos/${imageId}?client_id=${props.apiKey}`;
     props.setProgress(30);
-    let data = await fetch(url);
-    props.setProgress(50);
-    let parsedData = await data.json();
-    props.setProgress(70);
-    window.scrollTo({ top: "0", behavior: "smooth" });
-    props.setProgress(100);
-    if (!parsedData.errors) {
+    try {
+      const response = await axios.get(
+        `https://api.unsplash.com/photos/${imageId}?client_id=${props.apiKey}`
+      );
+      props.setProgress(50);
       setSelectedPhotoData({
-        imageId: parsedData.id,
-        imageThumbSrc: parsedData.urls.thumb,
-        imageSmallSrc: parsedData.urls.small,
-        imageRegularSrc: parsedData.urls.regular,
-        imageFullSrc: parsedData.urls.full,
-        downloadHref: parsedData.links.download,
-        imageViews: parsedData.views.toLocaleString(),
-        imageDownloads: parsedData.downloads.toLocaleString(),
-        imageDescription: parsedData.description,
-        imageLocation: parsedData.location.name,
-        publishedDate: new Date(`${parsedData.created_at}`).toLocaleString(
+        imageId: response.data.id,
+        imageThumbSrc: response.data.urls.thumb,
+        imageSmallSrc: response.data.urls.small,
+        imageRegularSrc: response.data.urls.regular,
+        imageFullSrc: response.data.urls.full,
+        downloadHref: response.data.links.download,
+        imageViews: response.data.views.toLocaleString(),
+        imageDownloads: response.data.downloads.toLocaleString(),
+        imageDescription: response.data.description,
+        imageLocation: response.data.location.name,
+        publishedDate: new Date(`${response.data.created_at}`).toLocaleString(
           "EN-US",
           { month: "long", day: "numeric", year: "numeric" }
         ),
-        cameraName: parsedData.exif.name,
-        userImage: parsedData.user.profile_image.small,
-        name: parsedData.user.name,
-        userName: parsedData.user.username,
-        userStatus: parsedData.user.for_hire,
-        userProfileLink: parsedData.user.links.html,
+        cameraName: response.data.exif.name,
+        userImage: response.data.user.profile_image.small,
+        name: response.data.user.name,
+        userName: response.data.user.username,
+        userStatus: response.data.user.for_hire,
+        userProfileLink: response.data.user.links.html,
       });
+      props.setProgress(70);
       props.setPagination(false);
-    } else {
+      props.setProgress(100);
+    } catch (error) {
+      props.setProgress(100);
       setIsImageFound(false);
     }
   };
 
   useEffect(() => {
-    updateSelectedPhoto(photoId);
+    updateSelectedPhoto(props.imageId ? props.imageId : photoId);
     return () => {};
     // eslint-disable-next-line
-  }, [photoId]);
+  }, [photoId, props.imageId]);
 
   const text = `Thanks to ${selectedPhotoData.name} @${selectedPhotoData.userName} for making this photo available freely on Unsplash 🎁 `;
   const url = window.location.href;
@@ -99,7 +99,9 @@ export default function SelectedPhoto(props) {
           }}
         >
           <div>
-            <header>
+            <header
+              style={props.headerStyle ? props.headerStyle : { top: "48px" }}
+            >
               <a
                 href={selectedPhotoData.userProfileLink}
                 target="_blank"
@@ -111,9 +113,7 @@ export default function SelectedPhoto(props) {
                 </figure>
                 <div className="image-description">
                   <span className="image-description__text">
-                    <div className="user-name">
-                      {selectedPhotoData.name}
-                    </div>
+                    <div className="user-name">{selectedPhotoData.name}</div>
                     {selectedPhotoData.userStatus ? (
                       <div className="user-status">
                         Available for hire{" "}
@@ -123,7 +123,15 @@ export default function SelectedPhoto(props) {
                   </span>
                 </div>
               </a>
-              <DownloadBtn showMenu={true} />
+              <DownloadBtn
+                showMenu={true}
+                downloadedImage={selectedPhotoData.imageSmallSrc}
+                userProfileLink={selectedPhotoData.userProfileLink}
+                userName={selectedPhotoData.name}
+                downloadUrl={selectedPhotoData.downloadHref}
+                setIsImageDownloaded={props.setIsImageDownloaded}
+                setDownloadedImageData={props.setDownloadedImageData}
+              />
             </header>
             <div className="selected-image">
               <img
@@ -189,17 +197,19 @@ export default function SelectedPhoto(props) {
               )}
             </div>
           </div>
-          <RelatedImages
-            apiKey={props.apiKey}
-            imageId={selectedPhotoData.imageId}
-            openImageHandler={props.openImageHandler}
-            updateSelectedImageData={updateSelectedPhoto}
-            setIsImageDownloaded={props.setIsImageDownloaded}
-            setDownloadedImageData={props.setDownloadedImageData}
-          />
+          {selectedPhotoData.imageId !== undefined && (
+            <RelatedImages
+              imageId={selectedPhotoData.imageId}
+              apiKey={props.apiKey}
+              openImageHandler={props.openImageHandler}
+              updateSelectedImageData={updateSelectedPhoto}
+              setIsImageDownloaded={props.setIsImageDownloaded}
+              setDownloadedImageData={props.setDownloadedImageData}
+            />
+          )}
         </div>
       ) : (
-        <ErrorPage />
+        <ErrorPage setPagination={props.setPagination} />
       )}
     </React.Fragment>
   );

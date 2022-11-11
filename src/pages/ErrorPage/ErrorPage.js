@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import classes from "./errorPage.module.css";
 
 export default function ErrorPage(props) {
   document.title = "Page not found | Galleria";
 
-  props.setPagination(false);
+  useEffect(() => {
+    props.setPagination(false);
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <div className={classes["main-container"]}>
@@ -13,6 +16,7 @@ export default function ErrorPage(props) {
       <img
         src="https://source.unsplash.com/random/?night,dark,landscape"
         alt=""
+        loading="lazy"
       />
       <div className={classes["content-wrapper"]}>
         <div className={classes["nav"]}>

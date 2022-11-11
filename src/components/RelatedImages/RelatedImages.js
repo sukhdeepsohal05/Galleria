@@ -1,5 +1,6 @@
-import React, { useState, useEffect} from "react";
-import classes from './relatedImages.module.css'
+import React, { useState, useEffect } from "react";
+import axios from 'axios'
+import classes from "./relatedImages.module.css";
 import RelatedImage from "./RelatedImage";
 import { useParams } from "react-router-dom";
 
@@ -8,16 +9,19 @@ export default function RelatedImages(props) {
   const { photoId } = useParams();
 
   const updateRelatedImages = async (imageId) => {
-    const url = `https://api.unsplash.com/photos/${imageId}/related?client_id=${props.apiKey}`;
-    let data = await fetch(url);
-    let parsedData = await data.json();
-    setRelatedImages(parsedData);
+    try {
+      const response = await axios.get(
+        `https://api.unsplash.com/photos/${imageId}/related?client_id=${props.apiKey}`
+      );
+      setRelatedImages(response.data);
+    } catch (error) {}
   };
 
   useEffect(() => {
-    updateRelatedImages(photoId ? photoId : props.imageId ? props.imageId : 'ERdTJQTtsbE');
+    updateRelatedImages(photoId ? photoId : props.imageId);
+    return () => {};
     // eslint-disable-next-line
-  }, [photoId]);
+  }, [photoId, props.imageId]);
 
   return (
     <>
@@ -35,7 +39,7 @@ export default function RelatedImages(props) {
                 userImage: element.user.profile_image.small,
                 userProfileLink: element.user.links.html,
                 userStatus: element.user.for_hire,
-                downloadHref: element.links.download
+                downloadHref: element.links.download,
               };
 
               return (

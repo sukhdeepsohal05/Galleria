@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import SelectedImage from "../../SelectedImage/SelectedImage";
 import "./Images.css";
 import stateContext from "../../Helpers/stateContext";
 import DownloadBtn from "../DowloadBtn/DownloadBtn";
+import SelectedPhoto from "../../../pages/SelectedPhoto/SelectedPhoto";
+import Modal from "../Modal/Modal";
 
 export default function Images(props) {
   const [isImageOpened, setIsImageOpened] = useState(false);
@@ -26,15 +27,22 @@ export default function Images(props) {
       }}
     >
       {isImageOpened === true && (
-        <SelectedImage
-          setIsImageOpened={setIsImageOpened}
-          openImageHandler={openImageHandler}
-          imageId={imageId}
-          apiKey={props.apiKey}
-          setProgress={props.setProgress}
-          setIsImageDownloaded={props.setIsImageDownloaded}
-          setDownloadedImageData={props.setDownloadedImageData}
-        />
+        <Modal setIsImageOpened={setIsImageOpened}>
+          <SelectedPhoto
+            headerStyle={{
+              top: "0px",
+              borderTopLeftRadius: "4px",
+              borderTopRightRadius: "4px",
+            }}
+            openImageHandler={openImageHandler}
+            imageId={imageId}
+            apiKey={props.apiKey}
+            setProgress={props.setProgress}
+            setPagination={props.setPagination}
+            setIsImageDownloaded={props.setIsImageDownloaded}
+            setDownloadedImageData={props.setDownloadedImageData}
+          />
+        </Modal>
       )}
       <div className="image-main__wrapper">
         {props.images.map((image) => {

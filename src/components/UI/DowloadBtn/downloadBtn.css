@@ -18,17 +18,18 @@
   align-items: center;
 }
 
-.selected-image__wrapper .download-btn__wrapper,
 .selected-photo__wrapper .download-btn__wrapper {
   position: static;
 }
 
-.selected-image__wrapper .download-btn,
 .selected-photo__wrapper .download-btn {
   display: flex;
   border: 1px solid #d1d1d1;
   border-bottom-right-radius: 0;
   border-top-right-radius: 0;
+}
+.selected-photo__wrapper .download-btn:hover {
+  border-color: #111;
 }
 
 .download-btn:hover {

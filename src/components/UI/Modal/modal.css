@@ -1,0 +1,27 @@
+.overlay {
+  background: #0009;
+  cursor: zoom-out;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 101;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.selected-image__wrapper {
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 8px 16px #00000026;
+  cursor: auto;
+  left: 5vw;
+  min-height: 100vh;
+  min-width: 0;
+  position: absolute;
+  top: 16px;
+  width: 90vw;
+  z-index: 100;
+  border-radius: 4px;
+}

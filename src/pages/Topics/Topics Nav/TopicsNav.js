@@ -30,7 +30,7 @@ export default function TopicsNav(props) {
         >
           <Link
             to="/"
-            className={window.location.pathname === "" ? "active" : ""}
+            className={window.location.pathname === "/" ? "active" : ""}
           >
             Editorial
           </Link>
